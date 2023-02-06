@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour {
+    [SerializeField] private Animator _animator;
     private Vector3 _targetPos;
+    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
 
     private void Update()
     {
@@ -14,6 +16,16 @@ public class Unit : MonoBehaviour {
             Vector3 moveDir = (_targetPos - transform.position).normalized;
             float moveSpeed = 4f;
             transform.position += moveDir * moveSpeed * Time.deltaTime;
+            
+            //Rotate
+            float rotateSpeed = 10f;
+            transform.forward = Vector3.Lerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+            
+            _animator.SetBool(IsWalking, true);
+        }
+        else
+        {
+            _animator.SetBool(IsWalking, false);
         }
 
         if (Input.GetMouseButton(0))
