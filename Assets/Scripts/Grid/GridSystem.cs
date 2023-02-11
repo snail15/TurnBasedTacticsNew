@@ -60,4 +60,14 @@ public class GridSystem
    {
       return gridPosition.X >= 0 && gridPosition.Z >= 0 && gridPosition.X < _width && gridPosition.Z < _height;
    }
+
+   public int GetWidth()
+   {
+      return _width;
+   }
+
+   public int GetHeight()
+   {
+      return _height;
+   }
 }
