@@ -41,5 +41,10 @@ public class GridObject {
    {
       _units.Remove(unit);
    }
+
+   public bool HasUnit()
+   {
+      return _units.Count > 0;
+   }
    
 }
