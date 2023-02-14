@@ -16,6 +16,7 @@ public class MoveAction : BaseAction
         base.Awake();
         _targetPos = transform.position;
     }
+    
 
     private void Update()
     {
@@ -85,5 +86,10 @@ public class MoveAction : BaseAction
         }
 
         return validGridPositionList;
+    }
+    
+    public override string GetActionName()
+    {
+        return "Move";
     }
 }
