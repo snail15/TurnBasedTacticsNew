@@ -18,11 +18,27 @@ public class UnitActionSystemUI : MonoBehaviour {
    }
    private void Start()
    {
+
+      #region Event Subscriptions
+
       UnitActionSystem.Instance.OnSelectedUnitChanged += OnSelectedUnitChanged;
       UnitActionSystem.Instance.OnSelectedActionChanged += OnSelectedActionChanged;
       UnitActionSystem.Instance.OnActionStarted += OnActionStarted;
+      TurnSystem.Instance.OnTurnChanged += OnTurnChanged;
+      Unit.OnAnyActionPointsChanged += UnitOnOnAnyActionPointsChanged;
+
+      #endregion
+      
       CreateUnitActionButtons();
       UpdatedSelectedVisual();
+      UpdateActionPoints();
+   }
+   private void UnitOnOnAnyActionPointsChanged(object sender, EventArgs e)
+   {
+      UpdateActionPoints();
+   }
+   private void OnTurnChanged(object sender, EventArgs e)
+   {
       UpdateActionPoints();
    }
    private void OnActionStarted(object sender, EventArgs e)
