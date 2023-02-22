@@ -14,7 +14,8 @@ public class Unit : MonoBehaviour {
     private SpinAction _spinAction;
     private BaseAction[] _baseActions;
     private int _actionPoints = ACTION_POINTS_MAX;
-
+    [SerializeField] private bool isEnemy;
+    
     private void Awake()
     {
         _spinAction = GetComponent<SpinAction>();
@@ -29,8 +30,11 @@ public class Unit : MonoBehaviour {
     }
     private void OnTurnChanged(object sender, EventArgs e)
     {
-        _actionPoints = ACTION_POINTS_MAX;
-        OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+        if ((IsEnemy() && !TurnSystem.Instance.IsPlayerTurn()) || (!IsEnemy() && TurnSystem.Instance.IsPlayerTurn()))
+        {
+            _actionPoints = ACTION_POINTS_MAX;
+            OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
     private void Update()
     {
@@ -97,6 +101,11 @@ public class Unit : MonoBehaviour {
     public int GetActionPoints()
     {
         return _actionPoints;
+    }
+
+    public bool IsEnemy()
+    {
+        return isEnemy;
     }
    
 }
