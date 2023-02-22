@@ -3,15 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour 
-{
+public class Unit : MonoBehaviour {
+
+    public static event EventHandler OnAnyActionPointsChanged;
+
+    private const int ACTION_POINTS_MAX = 2;
     
     private GridPosition _gridPosition;
     private MoveAction _moveAction;
     private SpinAction _spinAction;
     private BaseAction[] _baseActions;
-    private int _actionPoints = 2;
-
+    private int _actionPoints = ACTION_POINTS_MAX;
+    [SerializeField] private bool isEnemy;
+    
     private void Awake()
     {
         _spinAction = GetComponent<SpinAction>();
@@ -22,6 +26,15 @@ public class Unit : MonoBehaviour
     {
         _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this);
+        TurnSystem.Instance.OnTurnChanged += OnTurnChanged;
+    }
+    private void OnTurnChanged(object sender, EventArgs e)
+    {
+        if ((IsEnemy() && !TurnSystem.Instance.IsPlayerTurn()) || (!IsEnemy() && TurnSystem.Instance.IsPlayerTurn()))
+        {
+            _actionPoints = ACTION_POINTS_MAX;
+            OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
     private void Update()
     {
@@ -82,11 +95,17 @@ public class Unit : MonoBehaviour
     private void SpendActionPoints(int amount)
     {
         _actionPoints -= amount;
+        OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public int GetActionPoints()
     {
         return _actionPoints;
+    }
+
+    public bool IsEnemy()
+    {
+        return isEnemy;
     }
    
 }
