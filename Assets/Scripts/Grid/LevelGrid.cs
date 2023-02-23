@@ -55,6 +55,14 @@ public class LevelGrid : MonoBehaviour
    public bool HasUnitOnGridPosition(GridPosition gridPosition)
    {
       var gridObject = _gridSystem.GetGridObject(gridPosition);
-      return gridObject.HasUnit();
+      return gridObject.HasAnyUnit();
    }
+
+   public Unit GetUnitAtGridPosition(GridPosition gridPosition)
+   {
+      var gridObject = _gridSystem.GetGridObject(gridPosition);
+      return gridObject.GetUnit();
+   }
+   
+   
 }
