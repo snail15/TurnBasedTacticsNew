@@ -107,5 +107,13 @@ public class Unit : MonoBehaviour {
     {
         return isEnemy;
     }
-   
+
+    public void Damage()
+    {
+        Debug.Log(transform + " damaged!");
+    }
+    public Vector3 GetUnitWorldPosition()
+    {
+        return transform.position;
+    }
 }

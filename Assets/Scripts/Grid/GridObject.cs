@@ -42,9 +42,21 @@ public class GridObject {
       _units.Remove(unit);
    }
 
-   public bool HasUnit()
+   public bool HasAnyUnit()
    {
       return _units.Count > 0;
+   }
+
+   public Unit GetUnit()
+   {
+      if (HasAnyUnit())
+      {
+         return _units[0];
+      }
+      else
+      {
+         return null;
+      }
    }
    
 }

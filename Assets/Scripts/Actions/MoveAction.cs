@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEditor.Build;
 using UnityEngine;
 
-public class MoveAction : BaseAction
-{
-    [SerializeField] private Animator _animator;
+public class MoveAction : BaseAction {
+
+    public event EventHandler OnStartMoving;
+    public event EventHandler OnStopMoving;
+    
     [SerializeField] private int maxMoveDistance = 4;
     private Vector3 _targetPos;
- 
-    private static readonly int IsWalking = Animator.StringToHash("IsWalking");
+    
     protected override void Awake()
     {
         base.Awake();
@@ -20,8 +21,11 @@ public class MoveAction : BaseAction
 
     private void Update()
     {
-        if (!_isActive) return;
-        
+        if (!_isActive)
+        {
+            return;
+        }
+
         float stoppingdDistance = 0.1f;
         Vector3 moveDir = (_targetPos - transform.position).normalized;
         if (Vector3.Distance(transform.position, _targetPos) > stoppingdDistance)
@@ -30,13 +34,13 @@ public class MoveAction : BaseAction
             float moveSpeed = 4f;
             transform.position += moveDir * moveSpeed * Time.deltaTime;
 
-            _animator.SetBool(IsWalking, true);
+           
         }
         else
         {
-            _animator.SetBool(IsWalking, false);
-            _isActive = false;
-            onActionComplete();
+            
+            OnStopMoving?.Invoke(this, EventArgs.Empty);
+            ActionComplete();
         }
         
         //Rotate
@@ -46,9 +50,10 @@ public class MoveAction : BaseAction
 
     public override void TakeAction(GridPosition targetPos, Action onMoveComplete)
     {
-        this.onActionComplete = onMoveComplete;
+        ActionStart(onMoveComplete);
         _targetPos = LevelGrid.Instance.GetWorldPosition(targetPos);
-        _isActive = true;
+        
+        OnStartMoving?.Invoke(this, EventArgs.Empty);
     }
     
     public override List<GridPosition> GetValidActionGridPositionList()
