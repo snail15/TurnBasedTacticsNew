@@ -5,7 +5,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TurnBasedTactics/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TurnBasedTactics/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Unit.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Unit.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Actions/ShootAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Actions/ShootAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UnitAnimator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UnitAnimator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Unit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Unit.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UnitSelectedVisual.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UnitSelectedVisual.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +96,7 @@
       <workItem from="1677140023729" duration="91000" />
       <workItem from="1677140133489" duration="227000" />
       <workItem from="1677140384740" duration="4585000" />
+      <workItem from="1677231677595" duration="1290000" />
     </task>
     <servers />
   </component>
