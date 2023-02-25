@@ -8,7 +8,8 @@ public class Unit : MonoBehaviour {
     public static event EventHandler OnAnyActionPointsChanged;
 
     private const int ACTION_POINTS_MAX = 2;
-    
+
+    private HealthSystem _healthSystem;
     private GridPosition _gridPosition;
     private MoveAction _moveAction;
     private SpinAction _spinAction;
@@ -18,6 +19,7 @@ public class Unit : MonoBehaviour {
     
     private void Awake()
     {
+        _healthSystem = GetComponent<HealthSystem>();
         _spinAction = GetComponent<SpinAction>();
         _moveAction = GetComponent<MoveAction>();
         _baseActions = GetComponents<BaseAction>();
@@ -27,6 +29,12 @@ public class Unit : MonoBehaviour {
         _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this);
         TurnSystem.Instance.OnTurnChanged += OnTurnChanged;
+        _healthSystem.OnDead += OnDead;
+    }
+    private void OnDead(object sender, EventArgs e)
+    {
+        LevelGrid.Instance.RemoveUnitAtGridPosition(_gridPosition, this);
+        Destroy(gameObject);
     }
     private void OnTurnChanged(object sender, EventArgs e)
     {
@@ -108,9 +116,9 @@ public class Unit : MonoBehaviour {
         return isEnemy;
     }
 
-    public void Damage()
+    public void Damage(int damageAmount)
     {
-        Debug.Log(transform + " damaged!");
+        _healthSystem.Damage(damageAmount);
     }
     public Vector3 GetUnitWorldPosition()
     {
