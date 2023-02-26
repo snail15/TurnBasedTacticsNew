@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseAction : MonoBehaviour 
-{
+public abstract class BaseAction : MonoBehaviour {
+
+    public static event EventHandler OnAnyActionStarted;
+    public static event EventHandler OnAnyActionCompleted;
     
     protected Unit _unit;
     protected bool _isActive;
@@ -19,12 +21,16 @@ public abstract class BaseAction : MonoBehaviour
     {
         _isActive = true;
         this.onActionComplete = onActionComplete;
+        
+        OnAnyActionStarted?.Invoke(this, EventArgs.Empty);
     }
 
     protected void ActionComplete()
     {
         _isActive = false;
         onActionComplete();
+        
+        OnAnyActionCompleted?.Invoke(this, EventArgs.Empty);
     }
 
     public abstract string GetActionName();
@@ -39,5 +45,10 @@ public abstract class BaseAction : MonoBehaviour
     public virtual int GetActionPointsCost()
     {
         return 1;
+    }
+
+    public Unit GetUnit()
+    {
+        return _unit;
     }
 }
