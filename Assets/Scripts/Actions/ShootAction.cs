@@ -89,7 +89,6 @@ public class ShootAction : BaseAction {
     }
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
-        ActionStart(onActionComplete);
 
         _targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
         
@@ -99,6 +98,7 @@ public class ShootAction : BaseAction {
 
         _canShootBullet = true;
 
+        ActionStart(onActionComplete);
     }
     public override List<GridPosition> GetValidActionGridPositionList()
     {
@@ -144,5 +144,15 @@ public class ShootAction : BaseAction {
         }
 
         return validGridPositionList;
+    }
+
+    public Unit GetTargetUnit()
+    {
+        return _targetUnit;
+    }
+
+    public int GetMaxShootDistance()
+    {
+        return _maxShootDistance;
     }
 }
