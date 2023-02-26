@@ -434,7 +434,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.3310067, y: 3.5527137e-15, z: 6.614218e-23, w: 0.94362843}
+  m_LocalRotation: {x: 0.33100674, y: -0.00000003977096, z: 0.0000000139508884, w: 0.94362843}
   m_LocalPosition: {x: 0, y: 7.999993, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1474,7 +1474,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1050996739}
-  m_LocalRotation: {x: 0.3310067, y: 3.5527137e-15, z: 6.614218e-23, w: 0.94362843}
+  m_LocalRotation: {x: 0.33100674, y: -0.00000003977096, z: 0.0000000139508884, w: 0.94362843}
   m_LocalPosition: {x: 0, y: 7.999993, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1649,6 +1649,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridSystemVisualSinglePrefab: {fileID: 5051470444722641745, guid: e6298398fcba340b0810337f86efdb55,
     type: 3}
+  gridVisualTypeMaterialList:
+  - gridVisualType: 0
+    material: {fileID: 2100000, guid: d78a19b5878cc4e7bb5cf9e50c2269e9, type: 2}
+  - gridVisualType: 1
+    material: {fileID: 2100000, guid: 9d766a3a08d0b473184ec9265c24088d, type: 2}
+  - gridVisualType: 2
+    material: {fileID: 2100000, guid: 0fe4a6092b83344c1bd7939c4bf52d45, type: 2}
+  - gridVisualType: 3
+    material: {fileID: 2100000, guid: 2e22f7181f98f4c2e888cfd9c8f19600, type: 2}
+  - gridVisualType: 4
+    material: {fileID: 2100000, guid: b0b099cd3a2084db8a81d3f03770c32c, type: 2}
 --- !u!4 &1133429277
 Transform:
   m_ObjectHideFlags: 0
