@@ -15,12 +15,14 @@ public class Unit : MonoBehaviour {
     private GridPosition _gridPosition;
     private MoveAction _moveAction;
     private SpinAction _spinAction;
+    private ShootAction _shootAction;
     private BaseAction[] _baseActions;
     private int _actionPoints = ACTION_POINTS_MAX;
     [SerializeField] private bool isEnemy;
     
     private void Awake()
     {
+        _shootAction = GetComponent<ShootAction>();
         _healthSystem = GetComponent<HealthSystem>();
         _spinAction = GetComponent<SpinAction>();
         _moveAction = GetComponent<MoveAction>();
@@ -129,5 +131,15 @@ public class Unit : MonoBehaviour {
     public Vector3 GetUnitWorldPosition()
     {
         return transform.position;
+    }
+
+    public ShootAction GetShootAction()
+    {
+        return _shootAction;
+    }
+
+    public float GetHealthNormalized()
+    {
+        return _healthSystem.GetHealthNormalized();
     }
 }
