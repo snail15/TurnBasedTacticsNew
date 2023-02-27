@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEditor.Build;
 using UnityEngine;
 
-public class MoveAction : BaseAction {
+public class MoveAction : BaseAction 
+{
 
     public event EventHandler OnStartMoving;
     public event EventHandler OnStopMoving;
@@ -92,5 +93,17 @@ public class MoveAction : BaseAction {
     {
         return "Move";
     }
+    
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        int targetCountAtGridPosition = _unit.GetShootAction().GetTargetCountAtPosition(gridPosition);
+        
+        return new EnemyAIAction
+        {
+            gridPosition =  gridPosition,
+            actionValue = targetCountAtGridPosition * 10
+        };
+    }
+
    
 }

@@ -6,6 +6,8 @@ using UnityEngine;
 public class Unit : MonoBehaviour {
 
     public static event EventHandler OnAnyActionPointsChanged;
+    public static event EventHandler OnAnyUnitSpawned;
+    public static event EventHandler OnAnyUnitDead;
 
     private const int ACTION_POINTS_MAX = 2;
 
@@ -13,12 +15,14 @@ public class Unit : MonoBehaviour {
     private GridPosition _gridPosition;
     private MoveAction _moveAction;
     private SpinAction _spinAction;
+    private ShootAction _shootAction;
     private BaseAction[] _baseActions;
     private int _actionPoints = ACTION_POINTS_MAX;
     [SerializeField] private bool isEnemy;
     
     private void Awake()
     {
+        _shootAction = GetComponent<ShootAction>();
         _healthSystem = GetComponent<HealthSystem>();
         _spinAction = GetComponent<SpinAction>();
         _moveAction = GetComponent<MoveAction>();
@@ -30,11 +34,13 @@ public class Unit : MonoBehaviour {
         LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this);
         TurnSystem.Instance.OnTurnChanged += OnTurnChanged;
         _healthSystem.OnDead += OnDead;
+        OnAnyUnitSpawned?.Invoke(this, EventArgs.Empty);
     }
     private void OnDead(object sender, EventArgs e)
     {
         LevelGrid.Instance.RemoveUnitAtGridPosition(_gridPosition, this);
         Destroy(gameObject);
+        OnAnyUnitDead?.Invoke(this, EventArgs.Empty);
     }
     private void OnTurnChanged(object sender, EventArgs e)
     {
@@ -125,5 +131,15 @@ public class Unit : MonoBehaviour {
     public Vector3 GetUnitWorldPosition()
     {
         return transform.position;
+    }
+
+    public ShootAction GetShootAction()
+    {
+        return _shootAction;
+    }
+
+    public float GetHealthNormalized()
+    {
+        return _healthSystem.GetHealthNormalized();
     }
 }
