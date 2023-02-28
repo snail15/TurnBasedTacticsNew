@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a15289f4-d254-42bd-8540-3c6ca2780459" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TurnBasedTactics/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TurnBasedTactics/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Actions/BaseAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Actions/BaseAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Actions/MoveAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Actions/MoveAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Actions/ShootAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Actions/ShootAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Actions/SpinAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Actions/SpinAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/EnemyAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/EnemyAI.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Unit.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Unit.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +96,8 @@
       <workItem from="1677231677595" duration="1860000" />
       <workItem from="1677312464093" duration="5603000" />
       <workItem from="1677400570789" duration="6008000" />
-      <workItem from="1677481432725" duration="8543000" />
+      <workItem from="1677481432725" duration="9320000" />
+      <workItem from="1677577093265" duration="603000" />
     </task>
     <servers />
   </component>
