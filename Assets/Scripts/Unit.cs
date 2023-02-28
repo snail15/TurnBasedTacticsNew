@@ -13,19 +13,13 @@ public class Unit : MonoBehaviour {
 
     private HealthSystem _healthSystem;
     private GridPosition _gridPosition;
-    private MoveAction _moveAction;
-    private SpinAction _spinAction;
-    private ShootAction _shootAction;
     private BaseAction[] _baseActions;
     private int _actionPoints = ACTION_POINTS_MAX;
     [SerializeField] private bool isEnemy;
-    
+
     private void Awake()
     {
-        _shootAction = GetComponent<ShootAction>();
         _healthSystem = GetComponent<HealthSystem>();
-        _spinAction = GetComponent<SpinAction>();
-        _moveAction = GetComponent<MoveAction>();
         _baseActions = GetComponents<BaseAction>();
     }
     private void Start()
@@ -63,16 +57,7 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    public MoveAction GetMoveAction()
-    {
-        return _moveAction;
-    }
-
-    public SpinAction GetSpinAction()
-    {
-        return _spinAction;
-    }
-
+  
     public GridPosition GetGridPosition()
     {
         return _gridPosition;
@@ -95,7 +80,7 @@ public class Unit : MonoBehaviour {
             return false;
         }
     }
-    
+
     public bool CanSpendActionPointsToTakeAction(BaseAction baseAction)
     {
         if (_actionPoints >= baseAction.GetActionPointsCost())
@@ -132,14 +117,22 @@ public class Unit : MonoBehaviour {
     {
         return transform.position;
     }
-
-    public ShootAction GetShootAction()
-    {
-        return _shootAction;
-    }
-
+    
     public float GetHealthNormalized()
     {
         return _healthSystem.GetHealthNormalized();
+    }
+
+    public T GetAction<T>() where T : BaseAction
+    {
+        foreach (BaseAction baseAction in _baseActions)
+        {
+            if (baseAction is T action)
+            {
+                return action;
+            }
+        }
+
+        return null;
     }
 }
