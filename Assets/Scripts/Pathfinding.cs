@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class Pathfinding : Singleton<Pathfinding>
@@ -11,6 +12,7 @@ public class Pathfinding : Singleton<Pathfinding>
     private const int MOVE_DIAGONAL_COST = 14;
     
     [SerializeField] private Transform gridDebugObject;
+    [SerializeField] private LayerMask obstacleLayerMask;
     
     private int _width;
     private int _height;
@@ -19,15 +21,40 @@ public class Pathfinding : Singleton<Pathfinding>
     protected override void Awake()
     {
         base.Awake();
-        _gridSystem = new GridSystem<PathNode>(10,10,2f, (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
+    }
+
+    public void Setup(int width, int height, float cellSize)
+    {
+        _height = height;
+        _width = width;
+        _cellSize = cellSize;
+        _gridSystem = new GridSystem<PathNode>(width,height,cellSize, (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
         _gridSystem.CreateDebugObjects(gridDebugObject);
+
+        for (int x = 0; x < _width; x++)
+        {
+            for (int z = 0; z < _height; z++)
+            {
+                var gridPos = new GridPosition(x, z);
+                Vector3 worldPos = LevelGrid.Instance.GetWorldPosition(gridPos);
+                float raycastOffsetDistance = 5f;
+                if (Physics.Raycast(worldPos + Vector3.down * raycastOffsetDistance,
+                        Vector3.up,
+                        raycastOffsetDistance * 2,
+                        obstacleLayerMask))
+                {
+                    //Then there is obstacle here
+                    GetNode(x, z).SetIsWalkable(false);
+                }
+            }
+        }
     }
 
     public List<GridPosition> FindPath(GridPosition startGridPos, GridPosition endGridPos)
     {
-        List<PathNode> openList = new List<PathNode>();
-        List<PathNode> closedList = new List<PathNode>();
-
+        HashSet<PathNode> openList = new HashSet<PathNode>();
+        HashSet<PathNode> closedList = new HashSet<PathNode>();
+        
         PathNode startNode = _gridSystem.GetGridObject(startGridPos);
         PathNode endNode = _gridSystem.GetGridObject(endGridPos);
         openList.Add(startNode);
@@ -71,6 +98,12 @@ public class Pathfinding : Singleton<Pathfinding>
                     continue;
                 }
 
+                if (!neighborNode.IsWalkable())
+                {
+                    closedList.Add(neighborNode);
+                    continue;
+                }
+
                 int tentativeGCost = curNode.GetGCost() + CalculateDistance(curNode.GetGridPosition(), neighborNode.GetGridPosition());
 
                 if (tentativeGCost < neighborNode.GetGCost())
@@ -94,25 +127,28 @@ public class Pathfinding : Singleton<Pathfinding>
     }
     private List<GridPosition> CalculatePath(PathNode endNode)
     {
-        List<PathNode> pathNodeList = new List<PathNode>();
-        
-        pathNodeList.Add(endNode);
+        //List<PathNode> pathNodeList = new List<PathNode>();
+        Stack<PathNode> pathNodeList = new Stack<PathNode>();
+        pathNodeList.Push(endNode);
 
         PathNode curNode = endNode;
 
         while (curNode.GetCameFromPathNode() != null)
         {
-            pathNodeList.Add(curNode.GetCameFromPathNode());
+            pathNodeList.Push(curNode.GetCameFromPathNode());
             curNode = curNode.GetCameFromPathNode();
         }
 
-        pathNodeList.Reverse();
-
+        //pathNodeList.Reverse();
         List<GridPosition> gridPositonList = new List<GridPosition>();
-        foreach (PathNode pathNode in pathNodeList)
+        while (pathNodeList.Count > 0)
         {
-            gridPositonList.Add(pathNode.GetGridPosition());
+            gridPositonList.Add(pathNodeList.Pop().GetGridPosition());    
         }
+        // foreach (PathNode pathNode in pathNodeList)
+        // {
+        //     gridPositonList.Add(pathNode.GetGridPosition());
+        // }
 
         return gridPositonList;
     }
@@ -128,15 +164,16 @@ public class Pathfinding : Singleton<Pathfinding>
         return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, zDistance) + MOVE_STRAIGHT_COST * remaining;
     }
 
-    private PathNode GetLowestFCostPathNode(List<PathNode> pathNodeList)
+    private PathNode GetLowestFCostPathNode(HashSet<PathNode> pathNodeList)
     {
-        PathNode lowestFCostNode = pathNodeList[0];
+        List<PathNode> pathNodes = pathNodeList.ToList();
+        PathNode lowestFCostNode = pathNodes[0];
 
-        for (int i = 0; i < pathNodeList.Count; i++)
+        for (int i = 0; i < pathNodes.Count; i++)
         {
-            if (pathNodeList[i].GetFCost() < lowestFCostNode.GetFCost())
+            if (pathNodes[i].GetFCost() < lowestFCostNode.GetFCost())
             {
-                lowestFCostNode = pathNodeList[i];
+                lowestFCostNode = pathNodes[i];
             }
         }
 
