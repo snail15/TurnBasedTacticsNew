@@ -29,7 +29,7 @@ public class Pathfinding : Singleton<Pathfinding>
         _width = width;
         _cellSize = cellSize;
         _gridSystem = new GridSystem<PathNode>(width,height,cellSize, (GridSystem<PathNode> g, GridPosition gridPosition) => new PathNode(gridPosition));
-        _gridSystem.CreateDebugObjects(gridDebugObject);
+        //_gridSystem.CreateDebugObjects(gridDebugObject);
 
         for (int x = 0; x < _width; x++)
         {
