@@ -25,6 +25,8 @@ public class ShootAction : BaseAction {
     private float _stateTimer;
     private Unit _targetUnit;
     private bool _canShootBullet;
+
+    [SerializeField] private LayerMask obstaclesLayerMask;
     
     private void Update()
     {
@@ -140,6 +142,19 @@ public class ShootAction : BaseAction {
 
                 if (targetUnit.IsEnemy() == _unit.IsEnemy()) //both are on the same team
                 {
+                    continue;
+                }
+
+                Vector3 unitWorldPos = LevelGrid.Instance.GetWorldPosition(unitGridPos);
+                Vector3 shootDir = (targetUnit.GetUnitWorldPosition() - unitWorldPos).normalized;
+                
+                float unitShoulderHeight = 1.7f;
+                if (Physics.Raycast(unitWorldPos + Vector3.up * unitShoulderHeight,
+                        shootDir,
+                        Vector3.Distance(unitWorldPos, targetUnit.GetUnitWorldPosition()),
+                        obstaclesLayerMask))
+                {
+                    //Blocked by Obstacles
                     continue;
                 }
                 

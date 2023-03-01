@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor.Build;
 using UnityEngine;
 
@@ -11,15 +12,9 @@ public class MoveAction : BaseAction
     public event EventHandler OnStopMoving;
     
     [SerializeField] private int maxMoveDistance = 4;
-    private Vector3 _targetPos;
+    private List<Vector3> _targetPosList;
+    private int _currentPosIdx;
     
-    protected override void Awake()
-    {
-        base.Awake();
-        _targetPos = transform.position;
-    }
-    
-
     private void Update()
     {
         if (!_isActive)
@@ -27,9 +22,15 @@ public class MoveAction : BaseAction
             return;
         }
 
+        Vector3 targetPos = _targetPosList[_currentPosIdx];
         float stoppingdDistance = 0.1f;
-        Vector3 moveDir = (_targetPos - transform.position).normalized;
-        if (Vector3.Distance(transform.position, _targetPos) > stoppingdDistance)
+        Vector3 moveDir = (targetPos - transform.position).normalized;
+        
+        //Rotate
+        float rotateSpeed = 10f;
+        transform.forward = Vector3.Lerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        
+        if (Vector3.Distance(transform.position, targetPos) > stoppingdDistance)
         {
             
             float moveSpeed = 4f;
@@ -39,19 +40,29 @@ public class MoveAction : BaseAction
         }
         else
         {
+            _currentPosIdx += 1;
+            if (_currentPosIdx >= _targetPosList.Count)
+            {
+                OnStopMoving?.Invoke(this, EventArgs.Empty);
+                ActionComplete();
+            }
             
-            OnStopMoving?.Invoke(this, EventArgs.Empty);
-            ActionComplete();
         }
         
-        //Rotate
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Lerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+       
     }
 
-    public override void TakeAction(GridPosition targetPos, Action onMoveComplete)
+    public override void TakeAction(GridPosition gridPosition, Action onMoveComplete)
     {
-        _targetPos = LevelGrid.Instance.GetWorldPosition(targetPos);
+        List<GridPosition> pathGridPositionList =  Pathfinding.Instance.FindPath(_unit.GetGridPosition(), gridPosition, out int pathLength);
+        
+        _currentPosIdx = 0;
+        _targetPosList = new List<Vector3>();
+
+        foreach (GridPosition pathGridPosition in pathGridPositionList)
+        {
+           _targetPosList.Add(LevelGrid.Instance.GetWorldPosition(pathGridPosition));
+        }
         
         OnStartMoving?.Invoke(this, EventArgs.Empty);
         
@@ -79,6 +90,22 @@ public class MoveAction : BaseAction
                 }
                 if (LevelGrid.Instance.HasUnitOnGridPosition(testGridPos))
                 {
+                    continue;
+                }
+
+                if (!Pathfinding.Instance.IsWalkableGridPosition(testGridPos))
+                {
+                    continue;
+                }
+                if (!Pathfinding.Instance.HasPath(unitGridPos, testGridPos))
+                {
+                    continue;
+                }
+
+                int pathFindingDistanceMultiple = 10;
+                if (Pathfinding.Instance.GetPathLength(unitGridPos, testGridPos) > maxMoveDistance * pathFindingDistanceMultiple)
+                {
+                    //Path length too long
                     continue;
                 }
                 
